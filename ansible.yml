@@ -5,12 +5,12 @@
     - name: create new deployment
       command: kubectl apply -f /home/ubuntu/deployment.yml
       register: result
-      enviorment:
-        KUBECONFUG: /home/ubuntu/.kube/config
+      environment:
+        KUBECONFIG: /home/ubuntu/.kube/config
 
 
    - name: create new service
      command: kubectl apply -f /home/ubuntu/service.yml
      register: result
-     enviorment:
-       KUBECONFUG: /home/ubuntu/.kube/config
+     environment:
+       KUBECONFIG: /home/ubuntu/.kube/config
