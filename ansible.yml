@@ -7,10 +7,8 @@
       register: result
       environment:
         KUBECONFIG: /home/ubuntu/.kube/config
-
-
-   - name: create new service
-     command: kubectl apply -f /home/ubuntu/service.yml
-     register: result
-     environment:
-       KUBECONFIG: /home/ubuntu/.kube/config
+    - name: create new service
+      command: kubectl apply -f /home/ubuntu/service.yml
+      register: result
+      environment:
+        KUBECONFIG: /home/ubuntu/.kube/config
