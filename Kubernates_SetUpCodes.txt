@@ -70,7 +70,14 @@ kubeadm token create 70ebmu.ubceflz8h8s7onpz --print-join-command
 
 other steps - https://github.com/DEVOPS-WITH-WEB-DEV/Kubeadm-cluster-setup/blob/main/README.md
 
-======================== SET up Jenkins
+======================== SET up Ansible ===================================
+
+$ sudo apt update
+$ sudo apt install software-properties-common
+$ sudo add-apt-repository --yes --update ppa:ansible/ansible
+$ sudo apt install ansible
+
+======================== SET up Jenkins ===================================
 sudo apt update
 sudo apt install fontconfig openjdk-17-jre
 java -version
@@ -86,5 +93,35 @@ sudo apt-get install jenkins
 sudo systemctl enable jenkins
 sudo systemctl start jenkins
 sudo systemctl status jenkins
+
+
+======================== SET up docker ===========================================
+
+
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo docker run hello-world
+
+(First check the docker group)
+- cat /etc/group
+- sudo usermod -aG docker ubuntu
+- newgrp docker
+
+(check if docker works)
+docker images
+
 
   
