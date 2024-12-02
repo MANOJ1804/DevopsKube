@@ -18,7 +18,61 @@ overlay
 br_netfilter
 EOF
 
+sudo modprobe overlay
+sudo modprobe br_netfilter
 
+cat <<EOF❘ sudo tee /etc/sysctl.d/99-kubernetes-cri.conf
+net.bridge.bridge-nf-call-iptables = 1 net.ipv4.ip_forward = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+EOF
+
+sudo sysctl -system
+
+2. On all nodes, Install and configure containerd.
+
+
+sudo apt-get update && sudo apt-get install -y containerd
+sudo mkdir -p /etc/containerd
+sudo containerd config default | sudo tee /etc/containerd/config.toml sudo systemctl restart containerd
+sudo systemctl status containerd
+
+3. On all nodes, disable swap.
+
+sudo swapoff -a
+4. On all nodes, install kubeadm, kubelet, and kubectl.
+
+
+sudo apt-get update && sudo apt-get install -y apt-transport-https curl
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable: /v1.29/deb/ / | sudo tee /etc/apt/sources.list.d/kubernetes.list 
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring-8Pg
+sudo apt-get update
+sudo apt-get install -y kubelet-1.29.0-1.1 kubeadm-1.29.8-1.1 kubectl -1.29.0-1.1
+sudo apt-mark hold kubelet kubeadm kubectl
+
+5. On the control plane node only, initialize the cluster and set up kubectl access.
+
+Judo kubeadm init --pod-network-cidr 192.168.0.0/16--kubernetes-version 1.29.0
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id g) $HOME/.kube/config
+(to check if it is running)
+kubectl get nodes
+install calico
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/tigera-operator.yaml
+
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/custom-resources.yaml
+
+kubectl get nodes
+kubeadm token create --print-join-command
+(you need to past the outcome to all nodes)
+kubeadm token generate 
+(above will generate a new token)
+kubeadm token create 70ebmu.ubceflz8h8s7onpz --print-join-command
+
+other steps - https://github.com/DEVOPS-WITH-WEB-DEV/Kubeadm-cluster-setup/blob/main/README.md
+
+-------------------------------below is older version-----------------------------------
 2 - sudo modprobe overlay
 3 - sudo modprobe br_netfilter
 4 -
@@ -52,8 +106,9 @@ sudo kubeadm init --pod-network-cidr=192.168.0.0/16 --kubernetes-version 1.28.0
 mkdir -p $HOME/.kube 
 (at home directory/folder)
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+(to check permission firt run "ls -ld .kube/config")
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
-  
+  (please do not forget to install below steps)
 (to check if it is running)
 kubectl get nodes
 install calico
