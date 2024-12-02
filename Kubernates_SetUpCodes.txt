@@ -32,22 +32,22 @@ EOF
 6 - sudo apt-get update && sudo apt-get install -y containerd
 7 - sudo mkdir -p /etc/containerd
 8 - sudo containerd config default | sudo tee /etc/containerd/config.toml
-  - sudo sed -i -e 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
+  - sudo sed -i -e 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml (do not run this intially)
 9 - sudo systemctl restart containerd
 10 - sudo systemctl status containerd
 11 - sudo swapoff -a
-12 - free -h
+12 - ######free -h  (do not execute)
 13 - sudo apt-get update && sudo apt-get install -y apt-transport-https curl
 14 - echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 15 - sudo mkdir -p /etc/apt/keyrings
 16 - curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 17 - 
 sudo apt-get update
-sudo apt-get install -y kubelet=1.28.0-1.1 kubeadm=1.29.0-1.1 kubectl=1.28.0-1.1
+sudo apt-get install -y kubelet=1.28.0-1.1 kubeadm=1.28.0-1.1 kubectl=1.28.0-1.1
 sudo apt-mark hold kubelet kubeadm kubectl
 
 (on control plan)
-sudo kubeadm init --pod-network-cidr=192.168.0.0/16 --kubernetes-version 1.29.0
+sudo kubeadm init --pod-network-cidr=192.168.0.0/16 --kubernetes-version 1.28.0
 (above will give you a command that will return a command to join a node)
 mkdir -p $HOME/.kube 
 (at home directory/folder)
