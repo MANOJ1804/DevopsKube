@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: devops
+  lables:
+    app: devops
 spec:
   selector:
     app: devops
