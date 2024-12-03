@@ -14,6 +14,7 @@ spec:
     spec:
       containers:
       - name: devops
-        image: manojkumarab/devops-project
+        image: manojkumarab/devops003
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
