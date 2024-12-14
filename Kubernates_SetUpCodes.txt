@@ -177,6 +177,24 @@ sudo docker run hello-world
 
 (check if docker works)
 docker images
+====================================== Set up password less authentication ================================
 
+In Source System,
+
+1 - go to root directory like " cd ~"
+2 type ssh-keygen
+
+now to destination system.
+
+1 -  go to root directory like " cd ~"
+2-  cd /etc/ssh/
+3  ls
+4  vi ssh_config.d/
+5  vi ssh_config  --- Enable "Passwordauthentication : Yes
+6  cd sshd_config.d/
+7  ls
+8  vi 60-cloudimg-settings.conf " change to yes"
+9  systemctl restart ssh
+10  passwd ubuntu
 
   
