@@ -1,0 +1,26 @@
+pipeline {
+    agent {label 'Nodes'}
+
+    stages {
+        stage('Code Git Pull') {
+            steps {
+               git branch: 'main', url: 'https://github.com/MANOJ1804/django-notes-app.git'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker image build -t django-notes-app:latest . '
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Hello World'
+            }
+        }
+        stage('Deploy Docker conatainer') {
+            steps {
+                sh 'docker container run -itd -p 3600:80 django-notes-app:latest'
+            }
+        }
+    }
+}
