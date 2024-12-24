@@ -120,24 +120,48 @@ sudo docker run hello-world
 
 (check if docker works)
 docker images
-====================================== Set up password less authentication ================================
+======================================== Password less Authentication (between servers) ================================
 
-In Source System,
+********Open Source System.( as of now this is jenkins)
+- sudo su jenkins (login as jenkins becasue from jenkins you need to connect to destination system(ansible/docker/kubernates)
+- cd (go to home directory of jenkins)
+- pwd (to check /var/lib/jenkins )
+- ssh-keygen
+- cd .ssh/
+- ls -a (you`ll get key are created like id_rsa and id_rsa.pub)
 
-1 - go to root directory like " cd ~"
-2 type ssh-keygen
+********Open destination system ( as of now this is anible/docker server)
+- sudo su - (become root user)
+- cd /etc/ssh
+- vi ssh_config (open  this file and change passwordauthentication=yes)
+- cd sshd_config.d/
+- vi 60-clouding-setting.conf ( open this file and change passwordauthentication = yes)
+- systemclt restart ssh (restart ssh service )
+- passwd ubuntu ( set the password for ubuntu user)
 
-now to destination system.
 
-1 -  go to root directory like " cd ~"
-2-  cd /etc/ssh/
-3  ls
-4  vi ssh_config.d/
-5  vi ssh_config  --- Enable "Passwordauthentication : Yes
-6  cd sshd_config.d/
-7  ls
-8  vi 60-cloudimg-settings.conf " change to yes"
-9  systemctl restart ssh
-10  passwd ubuntu
+********once all done. Go to source system and from source system (as of now here this is jenkins)
+- ssh ubuntu@<private_ip_address_destination_system> (this i will ask for the password give ubuntu password)
 
-  
+********to make password less you need to copy ssh key
+- cd ~
+- ssh_copy_id ubuntu@<private_ip_address_destination_system>
+
+
+========================================= Set up docker Login in Jenkins =============================
+open pipeline syntex
+use option " withcredential:bindcredentialto varible"
+add " secret text"
+varible - <any_name>
+credentials -> click "add"
+fill details
+	- domain - global
+	- kind - secret text
+	- scope - global
+	- secret - " give docker login password that you use to login docker hub"
+	- id - <any_name>
+	- description - <any_name>
+
+click in generate pipeline
+
+------------------
