@@ -1,3 +1,5 @@
+Correct code is -  https://github.com/MANOJ1804/devops002.git
+==================================================== Kubernates Set Ups============================
 Get Aws t2.medium ubuntu Servers
 change hostname
  - sudo hostnamectl set-hostname control-plan
@@ -165,3 +167,15 @@ fill details
 click in generate pipeline
 
 ------------------
+
+Connect from Ansible server to Kubernates ( to run anisble command in kubernates server)
+- open Ansible server 
+- sudo cd /etc/anisble
+- sudo vi hosts
+   - below Ex2.
+        [node]
+		<private_ip_address_of_kubernates control plan>
+- ssh-keygen
+- copy-ssh-id ubuntu@<private_ip_address_of_kubernates>
+
+-----------------------
