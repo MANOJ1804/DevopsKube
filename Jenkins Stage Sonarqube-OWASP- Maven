@@ -1,1 +1,66 @@
 
+pipeline {
+    agent any
+    
+    tools {
+        jdk 'jkd11'
+        maven 'maven3'
+    }
+    
+    environment {
+        SCANNER_HOME=  tool 'sonar-scanner'
+    }
+    
+    stages {
+        stage('Git fetch code') {
+            steps {
+                git 'https://github.com/MANOJ1804/Java-online-shopping.git'
+            }
+        }
+        stage('Maven compile') {
+            steps {
+                sh "mvn clean compile"
+            }
+        }
+        stage('Sonar Analysis') {
+            steps {
+                sh ''' $SCANNER_HOME/bin/sonar-scanner \
+                -Dsonar.url=http://3.110.120.125:9000/ \
+                -Dsonar.login=squ_0ca0135d210dfb77f8a4df30d7157ea0455911b8 \
+                -Dsonar.projectName=shopping-cart \
+                -Dsonar.java.binaries=. \
+                -Dsonar.projectKey=shopping-cart
+                '''
+            }
+        }
+        stage('OWASP Dependenct check') {
+            steps {
+                dependencyCheck additionalArguments: ' --scan ./ ' , odcInstallation: 'DP'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
+        stage('Maven Build') {
+            steps {
+                sh "mvn clean install -DskipTests=true"
+            }
+        }
+        
+        stage('Docker build and push image') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker_pass', toolName: 'docker') {
+                            sh "docker build -t shopping:latest -f docker/Dockerfile ."
+                            sh "docker tag shopping:latest manojkumarab/shopping:latest"
+                            sh "docker push manojkumarab/shopping:latest"
+                        }
+                }
+            }
+        }
+        
+        stage('CD Pipeline Trigger') {
+            steps {
+                build job: "cd_pipeline" , wait: true
+            }
+        }
+    }
+}
