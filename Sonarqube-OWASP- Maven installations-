@@ -1,0 +1,81 @@
+******open sonar Qube (default port number is - 9000)
+To install Sonarqube
+- docker run -d -p 9000:9000 sonarqube:lts-community
+- docker ps -a
+- http://<public_ip_address>:9000/
+	username - admin
+	password - admin
+		(it will ask for password reset)
+
+******Create a Token & use token with jenkins
+- click on Administration->Security->users ->create token->give name and copy in some location.-> done (click)
+
+****** Jenkins plugins
+(below are the plugin required to install)
+Eclipse Termurin installer
+openJDK-native-plugin
+Sonarqube scanner
+pipeline: stage view
+OWASP dependeny check
+Docker
+Docker pipeline
+docker-build-step
+cloudeBees docker build and publish
+
+Jankins ->Manage Jenkins->tools->(here you need to configure)
+ ->JDK Installation (click on Add)
+	Name - jkd11 (any name you can give)
+	click on "Install Automatically"
+	Select "Add installer -> Install from adoptinum.net"
+	version - jdk-11.0.19+7
+
+ ->SonarQube Scanner (click on Add)
+	Name - sonar-scanner (any name you can give)
+	click on "Install Automatically"
+	version - SonarQube scanner 4.8.0.2856
+
+ -> Maven Installation (click on Add)
+	Name - maven3 (any name you can give)
+	click on "Install Automatically"
+	version -  3.6.0
+
+ ->Dependency-check installation (click on add)
+	Name - Dp (any name you can give)
+	click on "Install Automatically"
+	select from Git, 
+	version -  dependency-check 6.5.1
+
+ -> Docker (click on add)
+	Name - docker
+	click on "Install Automatically"
+	select from "Download from docker.com"
+	version: latest
+
+then apply and save
+
+*******  Pipeline
+ - create docker credential for jenkins
+  	- open Pipeline syntex.
+		- select "withDockerRegistry: Sets up Docker registry endpoint"
+		      - Docker registru url - <it will fetch automatically - do not mention>
+		      - Registry Credential-> click "Add" ->select "jenkins"
+		           -  kind - username with password
+                           - username - <docker hub user name "manojkumarab">
+			   - password - <docker hub password "manojkumarab">
+			   - ID <any thing>
+			   -description<any thing>
+        - registry credentials (in drop down you`ll get recently created)
+	- docker installation -> select "docker"
+        - Click "generate pipeline Script
+
+****** To restart Jenkins
+	- http://<public_ip_address>:8000/restart
+
+
+	
+
+
+
+
+
+
