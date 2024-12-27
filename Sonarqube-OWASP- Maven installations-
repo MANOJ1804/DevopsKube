@@ -1,5 +1,5 @@
 take ec2 large instance
-once you install docker. you need to assign permission to ubuntu and jenkins both.
+once you install docker and jenkins. you need to assign permission to ubuntu and jenkins both.
 	- sudo usermod -aG docker ubuntu
 	-  sudo usermod -aG docker jenkins
         - newgrp docker
