@@ -68,6 +68,11 @@ install calico
 (above will generate a new token)
 31 - kubeadm token create tun6vu.hdcsupw628llgyli --print-join-command
 
+================== If node is not ready state then execute below command
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+
+refrence -  https://stackoverflow.com/questions/49112336/container-runtime-network-not-ready-cni-config-uninitialized
+
 other steps - https://github.com/DEVOPS-WITH-WEB-DEV/Kubeadm-cluster-setup/blob/main/README.md
 
 ======================== SET up Ansible ===================================
