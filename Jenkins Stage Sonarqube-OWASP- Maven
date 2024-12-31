@@ -64,3 +64,22 @@ pipeline {
         }
     }
 }
+
+-------------------------------- CD Pipeline trigger------------
+
+pipeline {
+    agent any
+
+    stages {
+        stage('CD Pipeline for docker container deploy') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker_hubpassword', toolName: 'docker') {
+                            sh "docker run -d --name online-shopping-cart -p 8070:8070 manojkumarab/shopping:latest"
+                        }
+                }
+            }
+        }
+    }
+}
+
