@@ -1,0 +1,7 @@
+version: "3"
+services:
+  web:
+    image: manojkumarab/cipipeline
+    build: .
+    ports:
+      - "8200:80"
