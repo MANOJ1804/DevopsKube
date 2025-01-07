@@ -183,4 +183,27 @@ Connect from Ansible server to Kubernates ( to run anisble command in kubernates
 - ssh-keygen
 - copy-ssh-id ubuntu@<private_ip_address_of_kubernates>
 
------------------------
+-----------------------  To get Clean formate of file-----------
+- sudo apt install bat
+- To Display "batcat <file_name_that you_need_to_see>
+- To check docker image which port the application is running.
+	- docker history <image_name>
+
+----------------------- Basic command to Run Java Project in EC2 and open via public IP address---
+1 - Take any Ec2 Instance (t2.micro)
+2 - pwd (check present directory)
+3 - git clone https://github.com/Fir3eye/springboot-demo.git
+4 - sudo apt update
+5 - sudo apt install openjdk-17-jdk
+6 - sudo apt update
+7 - sudo apt install maven
+8 - Go inside the Project folder "cd <project_name>
+9 - Ensure 'pom.xml" should be present then inside this folder execute "mvn clean install" (Clean and Install the Project)
+10 -  mvn compile (compile)
+11 - mvn package (build package)
+12 - you`ll find a folder name "target is created"
+13 - go inside "target" folder and you`ll file ".jar" file inside it.
+14 - To run " java -jar <sendevops-0.0.1-SNAPSHOT.jar>" - this is will show at which port it is running.
+15 - mvn clean install -X (incase of build issue)
+
+--------------------------------------------------------------
