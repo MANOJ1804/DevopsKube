@@ -3,6 +3,14 @@ once you install docker and jenkins. you need to assign permission to ubuntu and
 	- sudo usermod -aG docker ubuntu
 	- sudo usermod -aG docker jenkins
         - newgrp docker
+
+******   Install trivy
+    sudo apt-get install wget apt-transport-https gnupg lsb-release -y
+    wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor | sudo tee /usr/share/keyrings/trivy.gpg > /dev/null
+    echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
+    sudo apt-get update
+    sudo apt-get install trivy -y
+
 ******open sonar Qube (default port number is - 9000)
 To install Sonarqube
 - docker run -d -p 9000:9000 sonarqube:lts-community
