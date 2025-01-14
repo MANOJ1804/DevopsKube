@@ -2,6 +2,8 @@
 pipeline {
     agent any
     
+    tools {pipeline {
+    agent any
     tools {
         jdk 'jkd11'
         maven 'maven3'
@@ -10,7 +12,7 @@ pipeline {
     environment {
         SCANNER_HOME=  tool 'sonar-scanner'
     }
-    
+
     stages {
         stage('Git fetch code') {
             steps {
@@ -25,8 +27,8 @@ pipeline {
         stage('Sonar Analysis') {
             steps {
                 sh ''' $SCANNER_HOME/bin/sonar-scanner \
-                -Dsonar.url=http://3.110.120.125:9000/ \
-                -Dsonar.login=squ_0ca0135d210dfb77f8a4df30d7157ea0455911b8 \
+                -Dsonar.url=http://13.232.151.222/:9000/ \
+                -Dsonar.login=squ_d04190499b958d1613f72fe1bf30692d52b3eaa2 \
                 -Dsonar.projectName=shopping-cart \
                 -Dsonar.java.binaries=. \
                 -Dsonar.projectKey=shopping-cart
@@ -39,7 +41,12 @@ pipeline {
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
-        stage('Maven Build') {
+        stage('TRIVY File System SCAN') {
+            steps {
+                sh "trivy fs . > trivyfs.txt"
+            }
+        }
+         stage('Maven Build') {
             steps {
                 sh "mvn clean install -DskipTests=true"
             }
@@ -48,7 +55,7 @@ pipeline {
         stage('Docker build and push image') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: 'docker_pass', toolName: 'docker') {
+                    withDockerRegistry(credentialsId: 'docker_passs'){
                             sh "docker build -t shopping:latest -f docker/Dockerfile ."
                             sh "docker tag shopping:latest manojkumarab/shopping:latest"
                             sh "docker push manojkumarab/shopping:latest"
@@ -56,14 +63,20 @@ pipeline {
                 }
             }
         }
+        stage("TRIVY Docker image SCAN"){
+            steps{
+                sh "trivy image --timeout 10m manojkumarab/shopping:latest > trivyimage.txt"
+            }
+        }
         
         stage('CD Pipeline Trigger') {
             steps {
-                build job: "cd_pipeline" , wait: true
+                build job: "cdstage" , wait: true
             }
         }
     }
 }
+
 
 -------------------------------- CD Pipeline trigger------------
 
