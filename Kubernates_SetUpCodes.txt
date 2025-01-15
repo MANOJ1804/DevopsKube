@@ -203,3 +203,21 @@ Connect from Ansible server to Kubernates ( to run anisble command in kubernates
 15 - mvn clean install -X (incase of build issue)
 
 --------------------------------------------------------------
+****** Create kubenates deployment manifest file 
+
+kubectl create deploy sprint-deploy --image=manojkumarab/springbootapp:latest --port=8080 --dry-run=client -o yaml >> sprint-deploy.yaml
+****** To apply
+kubectl apply -f sprint-deploy.yaml
+******	To verify 
+kubectl get pods
+
+-------------------
+
+****** Create kubenates Service manifest file
+
+kubectl expose deploy sprint-deploy<this should be same as given in deploy file> --type=NodePort --port=8100<external world port> --target-port=8080<port given in deployment file> --dry-run=client -o yaml >> sprint-svc.yaml
+
+***** Since the service is NodePort, you need to do Port-forwarding, to access externally
+
+kubectl port-forward svc/sprint-deploy 8100:8100
+
